@@ -194,14 +194,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return 1;
     }
 
+
     /**
-     * 根据标签搜索用户(内存过滤)
+     * SQL语句查询法
+     * 拼接 And 查询
      *
-     * @param tagNameList 用户要拥有的标签
+     * @param tagNameList
      * @return
      */
-
-
     @Override
     public List<User> searchUsersByTags(List<String> tagNameList) {
 
@@ -300,7 +300,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
 
-
+     /**
+     * 余弦相似度计算算法
+     */
         public Double getSimilarDegree (String userTags, String recommendTags){
 
             //创建向量空间模型，使用map实现，主键为词项，值为长度为2的数组，存放着对应词项在字符串中的出现次数
@@ -351,12 +353,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
     /**
-     * SQL语句查询法
-     * 拼接 And 查询
+     * 根据标签搜索用户(内存过滤)
      *
-     * @param tagNameList
+     * @param tagNameList 用户要拥有的标签
      * @return
      */
+
     @Deprecated
     private List<User> searchUsersByTagsBySQL(List<String> tagNameList) {
         if (CollectionUtils.isEmpty(tagNameList)) {
