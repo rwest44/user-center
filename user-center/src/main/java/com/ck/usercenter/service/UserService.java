@@ -1,11 +1,10 @@
 package com.ck.usercenter.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ck.usercenter.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户服务
@@ -24,7 +23,7 @@ public interface UserService extends IService<User> {
      * @return 新用户id
      */
 
-    long userRegister(String userAccount, String userPassword, String checkPassword);
+    long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode);
 
     /**
      * 用户登录
@@ -44,6 +43,14 @@ public interface UserService extends IService<User> {
     int userLogout(HttpServletRequest request);
 
     /**
+     * 根据标签搜索用户
+     *
+     * @param tagNameList 用户要拥有的标签
+     * @return
+     */
+    List<User> searchUsersByTags(List<String> tagNameList);
+
+    /**
      * 判断是否重复
      * @param column
      * @param val
@@ -60,4 +67,5 @@ public interface UserService extends IService<User> {
      */
     User loginUser(String userAccount, String encryptPassword);
 
+    List<User> recommendUsers(HttpServletRequest request);
 }

@@ -4,6 +4,7 @@ package com.ck.usercenter.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ck.usercenter.common.BaseResponse;
 import com.ck.usercenter.common.ErrorCode;
+import com.ck.usercenter.utils.LazySingleton;
 import com.ck.usercenter.utils.ResultUtils;
 import com.ck.usercenter.exception.BusinessException;
 import com.ck.usercenter.model.domain.User;
@@ -12,6 +13,7 @@ import com.ck.usercenter.model.domain.request.UserRegisterRequest;
 import com.ck.usercenter.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +31,8 @@ import static com.ck.usercenter.constant.UserConstant.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin(origins = { "https://localhost:3030" })
+//        (origins = { "http://49.234.23.193" }, allowCredentials = "true")
 public class UserController {
 
     @Resource
@@ -43,11 +47,11 @@ public class UserController {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-//        String planetCode = userRegisterRequest.getPlanetCode();
-        if (StringUtils.isAllBlank(userAccount, userPassword, checkPassword)){
+        String planetCode = userRegisterRequest.getPlanetCode();
+        if (StringUtils.isAllBlank(userAccount, userPassword, checkPassword, planetCode)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+        long result = userService.userRegister(userAccount, userPassword, checkPassword, planetCode);
         return ResultUtils.success(result);
     }
 
@@ -100,6 +104,24 @@ public class UserController {
         List<User> userList = userService.list(queryWrapper);
         List<User> list = userList.stream().map(user -> userService.getSafetyUser(user)).collect(Collectors.toList());
         return ResultUtils.success(list);
+    }
+
+    @GetMapping("/search/tags")
+    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList){
+        if (CollectionUtils.isEmpty(tagNameList)){
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<User> userList = userService.searchUsersByTags(tagNameList);
+        return ResultUtils.success(userList);
+    }
+
+    @GetMapping("/search/recommend")
+    public BaseResponse<List<User>> recommendUsers(HttpServletRequest request){
+        if (request == null){
+            throw new BusinessException(ErrorCode.NULL_ERROR);
+        }
+        List<User> userList = userService.recommendUsers(request);
+        return ResultUtils.success(userList);
     }
 
     @PostMapping("/delete")

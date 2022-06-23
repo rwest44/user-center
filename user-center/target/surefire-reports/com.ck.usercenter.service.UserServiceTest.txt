@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.ck.usercenter.service.UserServiceTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.456 s - in com.ck.usercenter.service.UserServiceTest

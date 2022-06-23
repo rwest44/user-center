@@ -64,10 +64,14 @@ public class User implements Serializable {
      */
     private Integer userRole;
 
-//    /**
-//     * 星球编号
-//     */
-//    private String planetCode;
+    /**
+     * 星球编号
+     */
+    private String planetCode;
+    /**
+     * 用户标签 json
+     */
+    private String tags;
 
     /**
      * 创建时间
@@ -84,6 +88,9 @@ public class User implements Serializable {
      */
     @TableLogic
     private Byte isDelete;
+
+    @TableField(exist = false)
+    private Double SimilarDegree;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
