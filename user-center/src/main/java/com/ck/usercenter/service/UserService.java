@@ -66,6 +66,10 @@ public interface UserService extends IService<User> {
      * @return
      */
     User loginUser(String userAccount, String encryptPassword);
-
+    /**
+     * 智能推荐伙伴
+     * @param request
+     * @return
+     */
     List<User> recommendUsers(HttpServletRequest request);
 }
